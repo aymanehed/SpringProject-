@@ -1,6 +1,6 @@
 package com.example.Springboot_project.Repositories;
 
-public enum UserRole {
+public enum Role {
     USER,
     ADMIN
 

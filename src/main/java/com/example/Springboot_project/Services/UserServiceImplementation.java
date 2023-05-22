@@ -22,7 +22,7 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public User gerUser(Long id) {
+    public User getUser(Long id) {
         return userRepository.findById(id).get();
     }
 

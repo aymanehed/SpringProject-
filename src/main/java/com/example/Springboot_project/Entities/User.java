@@ -1,39 +1,48 @@
 package com.example.Springboot_project.Entities;
-import com.example.Springboot_project.Repositories.UserRole;
+import com.example.Springboot_project.Repositories.Role;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.io.Serializable;
 import java.util.Collection;
-
+import java.util.List;
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false,updatable = false)
     private Long id;
-    private String Nom;
-    private String Prenom;
+    private String username;
+    private String firstname;
+    private String lastname;
 
-    private String Email;
-    private String Password;
+    private String email;
 
-    private UserRole userRole;
+    private String password;
+
+@Enumerated(EnumType.STRING)
+    private Role role;
+
     private Boolean locked;
+
     private Boolean Enabled;
 
-    public User() {
-        super();
+
+    public Role getUserRole() {
+        return role;
     }
 
-
-    public UserRole getUserRole() {
-        return userRole;
-    }
-
-    public void setUserRole(UserRole userRole) {
-        this.userRole = userRole;
+    public void setUserRole(Role userRole) {
+        this.role = userRole;
     }
 
     public Boolean getLocked() {
@@ -52,96 +61,52 @@ public class User implements UserDetails {
         Enabled = enabled;
     }
 
-    public User(String nom, String prenom, String email, String password, UserRole userRole, Boolean locked, Boolean enabled) {
-        Nom = nom;
-        Prenom = prenom;
-        Email = email;
-        Password = password;
-        this.userRole = userRole;
-        this.locked = locked;
-        Enabled = enabled;
-    }
 
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", Nom='" + Nom + '\'' +
-                ", Prenom='" + Prenom + '\'' +
-                ", Email='" + Email + '\'' +
-                ", Password='" + Password + '\'' +
+                ", Username='" + username+ '\'' +
+                ", Firstname='" + firstname + '\'' +
+                ", Lastname='" + lastname + '\'' +
+                ", Email='" + email + '\'' +
+                ", Password='" + password + '\'' +
                 '}';
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
     public String getPassword() {
-        return Password;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return username+role;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
-    }
-
-    public void setPassword(String password) {
-        Password = password;
-    }
-
-    public String getEmail() {
-        return Email;
-    }
-
-    public void setEmail(String email) {
-        Email = email;
+        return true;
     }
 
 
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getPrenom() {
-        return Prenom;
-    }
-
-    public void setPrenom(String prenom) {
-        Prenom = prenom;
-    }
-
-    public String getNom() {
-        return Nom;
-    }
-
-    public void setNom(String nom) {
-        Nom = nom;
-    }
 }
